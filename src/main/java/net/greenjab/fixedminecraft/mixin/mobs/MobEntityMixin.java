@@ -22,4 +22,17 @@ public abstract class MobEntityMixin extends LivingEntity {
     public ItemStack trimArmor(ItemStack stack) {
         return ArmorTrimmer.trimAtChanceIfTrimable(stack, this.random, this.getWorld().getRegistryManager());
     }
+
+
+    // Feature: Mobs can spawn wearing armor of different materials
+    @ModifyArg(method = "initEquipment", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/mob/MobEntity;getEquipmentForSlot(Lnet/minecraft/entity/EquipmentSlot;I)Lnet/minecraft/item/Item;"), index = 1)
+    private int randomizeEquipmentLevel(int equipmentLevel) {
+        equipmentLevel = 1;
+        for (int i=0; i<3; i++) {
+            if (random.nextFloat() < 0.095F) {
+                ++equipmentLevel;
+            }
+        }
+        return equipmentLevel;
+    }
 }
